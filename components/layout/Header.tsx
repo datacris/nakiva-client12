@@ -1,34 +1,25 @@
 import React, { useEffect } from "react";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-
-const OBTENER_USUARIO = gql`
-  query obtenerUsuario {
-    obtenerUsuario {
-      id
-      nombre
-      apellido
-    }
-  }
-`;
+import { GET_USER } from "../../config/queries";
 
 const Header = () => {
   const router = useRouter();
-  // Query apollo
-  const { data, loading, client } = useQuery(OBTENER_USUARIO);
-  // retrorno tempranos si aun no hay respuesta de la consulta
+  const { data, loading, client } = useQuery(GET_USER);
 
   useEffect(() => {
-    if (!loading && !data?.obtenerUsuario) {
+    if (!loading && !data?.getUser) {
       router.push("/login");
     }
+    console.log(loading);
+    console.log(data);
   }, [loading, data, router]);
 
   if (loading) return null;
 
-  const { nombre, apellido } = data?.obtenerUsuario || {};
-  
-  const cerrarSesion = () => {
+  const { name, email } = data?.getUser || {};
+
+  const logOut = () => {
     localStorage.removeItem("token");
     client.clearStore();
     router.push("/login");
@@ -36,15 +27,13 @@ const Header = () => {
 
   return (
     <div className="flex justify-between mb-6">
-      <p>
-        Hola: {nombre} {apellido}
-      </p>
+      <p>Hi: {name}</p>
       <button
         className="bg-blue-800 w-full sm:w-auto font-bold uppercase text-xs rounded py-1 px-2 text-white shadow-md"
         type="button"
-        onClick={() => cerrarSesion()}
+        onClick={() => logOut()}
       >
-        Cerrar Sesion
+        Log Out
       </button>
     </div>
   );

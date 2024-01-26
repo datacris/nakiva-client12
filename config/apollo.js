@@ -3,8 +3,8 @@ import { setContext } from "apollo-link-context";
 import fetch from "node-fetch";
 
 const httpLink = createHttpLink({
-  uri: "https://catstronauts-server-production-4829.up.railway.app/",
-  // uri: "http://localhost:4000/",
+  // uri: "https://catstronauts-server-production-4829.up.railway.app/",
+  uri: "http://localhost:4000/",
   fetch,
 });
 // para asignar el token
